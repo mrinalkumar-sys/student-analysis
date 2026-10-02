@@ -1,9 +1,17 @@
 """
 FastAPI Web Application and REST API for Student Performance Analysis.
 """
+
+import sys
 from typing import Dict, Any, Optional
 from pathlib import Path
 import shutil
+
+# Add the inner Student_Analysis_Project directory to Python's import path.
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+if str(PROJECT_DIR) not in sys.path:
+    sys.path.insert(0, str(PROJECT_DIR))
+
 from fastapi import FastAPI, HTTPException, Query, UploadFile, File
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
