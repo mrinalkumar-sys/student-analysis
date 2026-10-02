@@ -1,2 +1,2 @@
-﻿[tool.vercel]
-entrypoint = "Student_Analysis_Project.api.index:app"
+[tool.vercel]
+entrypoint = "Student_Analysis_Project.app.main:app"
