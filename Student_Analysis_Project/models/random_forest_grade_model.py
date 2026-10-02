@@ -1,4 +1,4 @@
-"""
+﻿"""
 Random Forest Grade Classification Model.
 Python module implementation replacing random_forest_grade_model.joblib.
 """
@@ -105,19 +105,27 @@ class RandomForestGradeModel:
         }
 
     def save_metadata(self, filepath: Optional[Path] = None):
-        """Saves label encodings and performance metrics to JSON."""
+        """Saves metadata when the filesystem is writable."""
         path = filepath or META_FILE
+
         payload = {
             "target_score_column": self.target_score_column,
             "feature_columns": self.feature_columns,
             "metrics": self.metrics,
             "feature_importance": self.feature_importance,
             "encoder_classes": {
-                col: le.classes_.tolist() for col, le in self.label_encoders.items()
+                col: le.classes_.tolist()
+                for col, le in self.label_encoders.items()
             }
         }
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2)
+
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+        except OSError:
+            # Vercel's deployed filesystem is read-only.
+            # Metadata is not required for model training.
+            pass
 
     def load_metadata(self, filepath: Optional[Path] = None) -> bool:
         """Loads label encodings and model metrics from JSON."""
@@ -190,3 +198,4 @@ if __name__ == "__main__":
         print("Accuracy:", summary["metrics"]["accuracy"])
         demo_pred = model.predict({"PracticeSport": "regularly", "TestPrep": "completed", "WklyStudyHours": "> 10"})
         print("Demo prediction:", demo_pred)
+
