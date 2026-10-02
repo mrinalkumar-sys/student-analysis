@@ -1,3 +1,7 @@
-﻿from app.main import app
+﻿import sys
+from pathlib import Path
 
-handler = app
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_DIR))
+
+from app.main import app
